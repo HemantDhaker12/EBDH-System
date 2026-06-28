@@ -1,42 +1,93 @@
 # EDHC (Evidence-Based Digital Hiring Committee)
 
-The Evidence-Based Digital Hiring Committee (EDHC) is a candidate search and ranking pipeline developed for the Redrob Candidate Discovery Challenge. The system screens and ranks candidate profiles against target job description rubrics using hybrid search models and a list-wise Learning-to-Rank framework.
+EDHC is an offline candidate discovery and ranking system developed for the **Redrob Candidate Discovery Challenge**.
 
-EDHC leverages multi-stage pre-filtering to process 100,000 candidate profiles locally on CPU, ensuring compliance with strict compute constraints. The system identifies profile chronology conflicts (honeypots), performs score calibration, and generates dynamic factual reasoning justifications for each final candidate.
+The system retrieves relevant candidates using a hybrid lexical and semantic retrieval pipeline, ranks them using a LightGBM LambdaMART Learning-to-Rank model, applies deterministic score calibration, and generates factual reasoning for every shortlisted candidate.
 
-## Problem Statement
+The entire pipeline runs locally without external APIs and is designed to satisfy the hackathon's CPU-only execution constraints.
 
-ATS platforms often rely on simple keyword matching, which is vulnerable to keyword stuffing and cannot detect timeline anomalies. The challenge is to identify and rank the Top 100 candidates from a pool of 100,000 profiles against a job description rubric, ignoring keyword stuffers, penalizing inconsistent timelines, and generating objective justifications.
+---
 
-## System Overview
+# Problem Statement
 
-```
-[100,000 Candidates Pool]
-         │
-         ▼ (Stage 1: Lexical pre-filter via BM25 Okapi)
-[Top 10,000 Candidates]
-         │
-         ▼ (Stage 2: Dense semantic search via E5/MiniLM + RRF)
-[Top 2,000 Candidates]
-         │
-         ▼ (Stage 3: 39-feature matrix + LightGBM LambdaMART ranker)
-[Top 100 Calibrated Candidates] ──► Write to submission.csv
-```
+Traditional Applicant Tracking Systems (ATS) rely heavily on keyword matching, making them susceptible to keyword stuffing and poor semantic understanding.
 
-The pipeline operates in three stages:
-* **Candidate normalization**: Dynamic conversion of candidate profile inputs into standardized structures.
-* **Hybrid retrieval**: Keyword matching (BM25) combined with dense semantic similarity (E5 prefixing via `all-MiniLM-L6-v2` embeddings) fused via Reciprocal Rank Fusion (RRF, $k=60$).
-* **LambdaMART ranking + score calibration + reasoning generation**: Cohort ranking via a LightGBM LambdaMART model, score adjustment for notice periods and consulting backgrounds, tie-breakers, and narrative committee justifications.
+The objective of this project is to identify and rank the best 100 candidates from a dataset of 100,000 candidate profiles by combining lexical retrieval, semantic retrieval, feature engineering, Learning-to-Rank, credibility analysis, and deterministic score calibration.
 
-## Repository Structure
+---
+
+# System Architecture
 
 ```
+                    100,000 Candidate Profiles
+                              │
+                              ▼
+                 BM25 Lexical Retrieval
+                   (Top 4,000 Candidates)
+                              │
+                              ▼
+      Dense Semantic Retrieval (SentenceTransformer)
+               + Reciprocal Rank Fusion (RRF)
+                  (Top 2,000 Candidates)
+                              │
+                              ▼
+                  39 Engineered Features
+                              │
+                              ▼
+               LightGBM LambdaMART Ranker
+                              │
+                              ▼
+                  Score Calibration
+                              │
+                              ▼
+                Reasoning Generation
+                              │
+                              ▼
+               Top 100 Ranked Candidates
+                              │
+                              ▼
+                    submission.csv
+```
+
+The pipeline consists of three primary stages:
+
+### 1. Candidate Normalization
+
+Incoming candidate profiles are normalized into a consistent internal schema before downstream processing.
+
+### 2. Hybrid Candidate Retrieval
+
+Candidate discovery combines:
+
+* BM25 lexical retrieval
+* Dense semantic retrieval using the `all-MiniLM-L6-v2` SentenceTransformer model with E5-style query/document prefixing
+* Reciprocal Rank Fusion (RRF) to merge lexical and semantic rankings
+
+### 3. Learning-to-Rank
+
+Retrieved candidates are represented using a 39-feature engineering pipeline and ranked using a LightGBM LambdaMART model.
+
+The ranked candidates are then:
+
+* calibrated,
+* checked for credibility and consistency,
+* assigned deterministic scores,
+* accompanied by factual reasoning summaries.
+
+---
+
+# Repository Structure
+
+```text
 EBDH/
-├── LICENSE                        # MIT License
-├── README.md                      # Primary project documentation
-├── rank.py                        # Root candidate ranking CLI orchestrator
-├── hackathon_assets/              # Candidate schemas, validators, and sample inputs
-├── docs/                          # Core implementation details
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── submission_metadata.yaml
+├── rank.py
+├── main.py
+├── submission.csv
+├── docs/
 │   ├── architecture.md
 │   ├── retrieval_pipeline.md
 │   ├── ranking_pipeline.md
@@ -45,107 +96,174 @@ EBDH/
 │   ├── training_pipeline.md
 │   ├── challenge_constraints.md
 │   └── design_decisions.md
-└── edhc/                          # Core application Python package
+├── edhc/
+└── hackathon_assets/
 ```
 
-## Requirements
+---
 
-* **Python version**: Python 3.11
-* **Dependencies**: Specified in `edhc/requirements.txt`
-* **Offline execution**: 100% local (no external API calls or network requests)
-* **CPU-only**: Designed and optimized for CPU hosts with ≤16GB RAM
+# Requirements
+
+* Python 3.11+
+* Dependencies listed in `edhc/requirements.txt`
+* Offline execution
+* CPU-only execution
+* Designed for systems with up to 16 GB RAM
+
+---
 
 # Quick Start
 
-## 1. Clone the repository
+## Clone the Repository
 
 ```bash
-git clone <repo_url>
+git clone <YOUR_GITHUB_REPOSITORY>
 cd EBDH
 ```
 
-## 2. Create a virtual environment
+## Create a Virtual Environment
 
 ```bash
 python -m venv .venv
 ```
 
-## 3. Activate it
+### Windows
 
-Windows:
 ```bash
 .venv\Scripts\activate
 ```
 
-Linux/macOS:
+### Linux / macOS
+
 ```bash
 source .venv/bin/activate
 ```
 
-## 4. Install dependencies
+## Install Dependencies
 
 ```bash
 pip install -r edhc/requirements.txt
 ```
 
-## 5. (Optional) Retrain the model
+---
 
-```bash
-python edhc/train_ranker.py --candidates ./hackathon_assets/candidates.jsonl --sample-size 5000 --retrieval-limit 3000
+# Dataset
+
+The repository does **not** include the official challenge dataset.
+
+Download the official hackathon assets and place them inside:
+
+```
+hackathon_assets/
 ```
 
-## 6. Generate submission.csv
+Required files:
+
+* `candidates.jsonl`
+* `validate_submission.py`
+
+Optional:
+
+* `sample_candidates.json` (used for sandbox demonstration)
+
+---
+
+# (Optional) Retrain the Model
+
+Retraining is only required if the ranking model or training pipeline has been modified.
 
 ```bash
-python rank.py --candidates ./hackathon_assets/candidates.jsonl --out submission.csv
+python edhc/train_ranker.py \
+    --candidates ./hackathon_assets/candidates.jsonl \
+    --sample-size 5000 \
+    --retrieval-limit 3000
 ```
 
-## 7. Validate the submission
+---
+
+# Reproduce submission.csv
+
+Generate the final submission directly from the official candidate dataset.
+
+```bash
+python rank.py \
+    --candidates ./hackathon_assets/candidates.jsonl \
+    --out submission.csv
+```
+
+No manual editing or post-processing is required.
+
+---
+
+# Validate the Submission
 
 ```bash
 python hackathon_assets/validate_submission.py submission.csv
 ```
 
-## 8. Run tests
+---
+
+# Run Tests
 
 ```bash
 pytest
 ```
 
-## Dataset
+---
 
-The repository does not include the full candidate dataset. 
-
-Download the official hackathon assets and place them inside:
-`hackathon_assets/`
-
-Required files:
-- `candidates.jsonl`
-- `validate_submission.py`
-- `sample_candidates.json` (optional for sandbox/demo)
-
-## Project Highlights
+# Project Highlights
 
 * Hybrid BM25 + Semantic Retrieval
-* Reciprocal Rank Fusion
-* LambdaMART Learning-to-Rank
-* 39 engineered features
-* Explainable ranking
+* Reciprocal Rank Fusion (RRF)
+* LightGBM LambdaMART Learning-to-Rank
+* 39 Engineered Features
+* Candidate Credibility Analysis
+* Deterministic Score Calibration
+* Explainable Candidate Reasoning
+* Fully Offline Execution
+* CPU-Only Pipeline
+
+---
+
+# Challenge Constraints
+
+The implementation is designed to satisfy the hackathon constraints:
+
 * Offline execution
-* CPU-only
+* CPU-only execution
+* Deterministic ranking output
+* No external API dependencies
+* Designed to execute within the challenge runtime limit (≤5 minutes)
 
-## Constraints
+---
 
-* Offline execution
-* CPU only
-* Under hackathon runtime limit (under ~3 minutes execution)
-* Deterministic output
+# Documentation
 
-## Sandbox
+Additional implementation details are available in the `docs/` directory:
 
-* **Sandbox URL Placeholder**: `https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SANDBOX_PLACEHOLDER`
-* Demonstrates pipeline execution on `sample_candidates.json` (≤100 candidates) and outputs a ranked CSV.
+* Architecture
+* Retrieval Pipeline
+* Ranking Pipeline
+* Feature Engineering
+* Training Pipeline
+* Reasoning Engine
+* Challenge Constraints
+* Design Decisions
 
-## License
+---
 
-This repository is licensed under the [MIT License](LICENSE).
+# Sandbox
+
+A hosted sandbox demonstrating the ranking pipeline on a small candidate sample (≤100 candidates) will be added before submission.
+
+**Sandbox URL**
+
+```
+https://huggingface.co/spaces/<USERNAME>/<SPACE_NAME>
+```
+
+---
+
+# License
+
+This project is licensed under the MIT License.
