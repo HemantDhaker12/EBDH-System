@@ -1,0 +1,64 @@
+{
+    "id": "8feb5b16542816f4",
+    "name": "Jane Doe",
+    "email": "jane.doe@example.com",
+    "headline": "Senior Machine Learning Engineer with 8 years of experience designing ranking systems, recommender e",
+    "summary": "Senior Machine Learning Engineer with 8 years of experience designing ranking systems, recommender engines, and training deep learning models. Proficient in Python, PyTorch, LightGBM, and FastAPI.",
+    "skills": [
+        "fastapi",
+        "pytorch",
+        "sql",
+        "kubernetes",
+        "docker",
+        "python",
+        "search systems",
+        "lightgbm"
+    ],
+    "experiences": [
+        {
+            "job_title": "Senior ML Engineer",
+            "normalized_title": "Senior Machine Learning Engineer",
+            "company_name": "Google",
+            "company_tier": 1,
+            "start_date": "2021-06-01",
+            "end_date": null,
+            "is_current": true,
+            "description": "Led a team designing the search ranking algorithm. Built information retrieval system using hybrid retrieval (BM25 + dense embeddings). Wrote production pipelines in Python.",
+            "duration_years": 5.06
+        },
+        {
+            "job_title": "Software Engineer (ML)",
+            "normalized_title": "Machine Learning Engineer",
+            "company_name": "Spotify",
+            "company_tier": 2,
+            "start_date": "2018-03-01",
+            "end_date": "2021-05-30",
+            "is_current": false,
+            "description": "Implemented recommendation systems using Python and PyTorch. Handled deployment of model pipelines in production.",
+            "duration_years": 3.25
+        }
+    ],
+    "projects": [
+        {
+            "title": "Search Rank Engine",
+            "description": "Created custom search ranking engine using LightGBM LambdaMART and rank-bm25.",
+            "skills_used": [
+                "Python",
+                "LightGBM",
+                "rank-bm25"
+            ],
+            "url": "https://github.com/janedoe/search-rank"
+        }
+    ],
+    "education": [
+        {
+            "degree": "MS",
+            "major": "Computer Science",
+            "institution": "Stanford University",
+            "graduation_year": 2018
+        }
+    ],
+    "metadata": {
+        "normalized_at": "2026-06-23"
+    }
+}

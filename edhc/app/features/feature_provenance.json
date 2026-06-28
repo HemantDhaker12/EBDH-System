@@ -1,0 +1,199 @@
+{
+  "provenance": {
+    "services_company_ratio": {
+      "origin_fields": ["career_history.company"],
+      "transformation_logic": "Fraction of total career months spent at consulting/services firms ( TCS, Infosys, Wipro, Accenture, Cognizant, Capgemini, HCL, Tech Mahindra, L&T, Deloitte, PwC, KPMG, EY, Genpact, etc.).",
+      "confidence": "High"
+    },
+    "product_company_ratio": {
+      "origin_fields": ["career_history.company"],
+      "transformation_logic": "Complement of services_company_ratio (1.0 - services_company_ratio). Represents product focus.",
+      "confidence": "High"
+    },
+    "startup_company_ratio": {
+      "origin_fields": ["career_history.company_size"],
+      "transformation_logic": "Fraction of total career months spent at startup sized firms (1-10, 11-50, 51-200, 201-500 size classes).",
+      "confidence": "High"
+    },
+    "enterprise_company_ratio": {
+      "origin_fields": ["career_history.company_size"],
+      "transformation_logic": "Fraction of total career months spent at enterprise sized firms (5001-10000, 10001+ size classes).",
+      "confidence": "High"
+    },
+    "career_stability_score": {
+      "origin_fields": ["career_history.duration_months"],
+      "transformation_logic": "Nonlinear score scaling based on average tenure across roles, penalized by the number of short jobs (< 12 months duration).",
+      "confidence": "High"
+    },
+    "notice_period_score": {
+      "origin_fields": ["redrob_signals.notice_period_days"],
+      "transformation_logic": "Continuous score thresholding (1.0 for immediate, 0.9 for <=15 days, 0.75 for <=30 days, 0.4 for <=60 days, 0.1 for 90+ days).",
+      "confidence": "High"
+    },
+    "domain_relevance_score": {
+      "origin_fields": ["profile.headline", "profile.summary", "profile.current_title", "profile.current_industry", "career_history.title", "career_history.description"],
+      "transformation_logic": "Hierarchical match count of domain keywords grouped into search-ranking (Tier 1), ML/NLP (Tier 2), and general engineering (Tier 3), boosted by target titles and discounted for irrelevant domains.",
+      "confidence": "High"
+    },
+    "promotion_trajectory_score": {
+      "origin_fields": ["career_history.title", "career_history.start_date"],
+      "transformation_logic": "Upward progression metric checking if seniority levels (Junior=0.5, Standard=1.0, Senior=2.0, Executive/Principal=3.0) increase over chronological timeline.",
+      "confidence": "Medium"
+    },
+    "evidence_strength": {
+      "origin_fields": ["ledger.verifications"],
+      "transformation_logic": "Average verification confidence score computed across all target competencies in the Evidence Ledger.",
+      "confidence": "High"
+    },
+    "impact_extraction_score": {
+      "origin_fields": ["career_history.description", "profile.summary"],
+      "transformation_logic": "Density rating of quantitative metric regex patterns matched in candidate descriptions (percentages, latency times, user scale numbers).",
+      "confidence": "Medium"
+    },
+    "credibility_score": {
+      "origin_fields": ["consistency_stats.credibility_score"],
+      "transformation_logic": "Continuous, cap-floored score starting at 1.0, reduced by temporal overlap penalties, salary discrepancies, duration inflation, and honeypot traps.",
+      "confidence": "High"
+    },
+    "rrf_retrieval_score": {
+      "origin_fields": ["retrieval_diag.rrf_score"],
+      "transformation_logic": "Unified reciprocal rank fusion score fuzing lexical and semantic rankings.",
+      "confidence": "High"
+    },
+    "bm25_retrieval_score": {
+      "origin_fields": ["retrieval_diag.bm25_score"],
+      "transformation_logic": "Raw scoring similarity output from rank_bm25 lexical engine.",
+      "confidence": "High"
+    },
+    "dense_retrieval_score": {
+      "origin_fields": ["retrieval_diag.dense_similarity"],
+      "transformation_logic": "Raw SentenceTransformer cosine similarity score calculated for the candidate summary profile.",
+      "confidence": "High"
+    },
+    "retrieval_rank_percentile": {
+      "origin_fields": ["retrieval_diag.rrf_rank"],
+      "transformation_logic": "Normalized percentile rank within the reciprocal rank fusion retrieval pool (1.0 - rank/pool_size).",
+      "confidence": "High"
+    },
+    "jd_title_similarity": {
+      "origin_fields": ["profile.current_title", "career_history.title"],
+      "transformation_logic": "Jaccard intersection over union word similarity check between job description title and candidate's held titles.",
+      "confidence": "High"
+    },
+    "jd_summary_similarity": {
+      "origin_fields": ["profile.summary", "jd.rubric.competencies"],
+      "transformation_logic": "Normalized word overlap between target competencies semantic keywords and candidate professional summary.",
+      "confidence": "High"
+    },
+    "competency_coverage": {
+      "origin_fields": ["ledger.verifications"],
+      "transformation_logic": "Ratio of verified hiring competencies to the total rubric competencies.",
+      "confidence": "High"
+    },
+    "skill_overlap_ratio": {
+      "origin_fields": ["skills.name", "jd.rubric.competencies"],
+      "transformation_logic": "Validated matching skill ratio checking cross-source support for JD target skills.",
+      "confidence": "High"
+    },
+    "relevant_experience_years": {
+      "origin_fields": ["career_history.title", "career_history.description", "career_history.duration_months"],
+      "transformation_logic": "Sum of experience durations (in years) restricted to roles that contain ML, Search, Ranking, or AI keywords.",
+      "confidence": "High"
+    },
+    "average_tenure_years": {
+      "origin_fields": ["career_history.duration_months"],
+      "transformation_logic": "Average duration in years per job in professional history.",
+      "confidence": "High"
+    },
+    "career_continuity_score": {
+      "origin_fields": ["career_history.start_date", "career_history.end_date"],
+      "transformation_logic": "Penalizes gaps between chronological experience records longer than 3 months.",
+      "confidence": "Medium"
+    },
+    "promotion_velocity": {
+      "origin_fields": ["career_history.title", "career_history.duration_months"],
+      "transformation_logic": "Number of senior titles held divided by total career duration in years.",
+      "confidence": "Medium"
+    },
+    "leadership_indicator_score": {
+      "origin_fields": ["career_history.title"],
+      "transformation_logic": "Highest leadership seniority indicator score matched from career titles (Lead=0.6, Senior=0.3, Exec/VP=1.0).",
+      "confidence": "Medium"
+    },
+    "technical_specialization_trend": {
+      "origin_fields": ["career_history.title", "career_history.description", "career_history.start_date"],
+      "transformation_logic": "Compares domain keywords matching in the latest role description to the earliest role to detect increasing specialization over time.",
+      "confidence": "Medium"
+    },
+    "num_verified_skills": {
+      "origin_fields": ["skills.name"],
+      "transformation_logic": "Count of declared skills that are successfully corroborated across at least 2 independent sections.",
+      "confidence": "High"
+    },
+    "cross_source_verification_count": {
+      "origin_fields": ["skills.name"],
+      "transformation_logic": "Count of skills supported by multiple sources. Perfect duplicate of num_verified_skills.",
+      "confidence": "High"
+    },
+    "skill_diversity_score": {
+      "origin_fields": ["skills.name"],
+      "transformation_logic": "Fraction of distinct engineering domains (ML/NLP, Backend/Cloud, Data Engineering, Search/IR) covered by verified skills.",
+      "confidence": "High"
+    },
+    "skill_recency_score": {
+      "origin_fields": ["skills.name", "career_history.description", "career_history.is_current"],
+      "transformation_logic": "Ratio of verified skills that are active (mentioned) in the current or latest job description.",
+      "confidence": "Medium"
+    },
+    "skill_longevity_score": {
+      "origin_fields": ["skills.duration_months"],
+      "transformation_logic": "Capped total months of experience summed across all verified skill audits.",
+      "confidence": "High"
+    },
+    "notice_period_normalized": {
+      "origin_fields": ["redrob_signals.notice_period_days"],
+      "transformation_logic": "Linear scaling of notice days capped at 90 days (1.0 - notice_days/90.0).",
+      "confidence": "High"
+    },
+    "relocation_willingness": {
+      "origin_fields": ["redrob_signals.willing_to_relocate"],
+      "transformation_logic": "Binary float indicator (1.0 for willing, 0.0 for unwilling).",
+      "confidence": "High"
+    },
+    "availability_indicator": {
+      "origin_fields": ["redrob_signals.open_to_work_flag"],
+      "transformation_logic": "Binary float indicator representing open to work status.",
+      "confidence": "High"
+    },
+    "timeline_consistency": {
+      "origin_fields": ["consistency_stats.credibility_penalty"],
+      "transformation_logic": "Complement score of the credibility penalty (1.0 - penalty/2.0). Highly correlated with credibility score.",
+      "confidence": "High"
+    },
+    "contradiction_count": {
+      "origin_fields": ["consistency_stats.warnings"],
+      "transformation_logic": "Count of validation warnings generated during consistency checks.",
+      "confidence": "High"
+    },
+    "profile_completeness": {
+      "origin_fields": ["redrob_signals.profile_completeness_score"],
+      "transformation_logic": "Linear scaling of completeness percentage (completeness_score / 100.0).",
+      "confidence": "High"
+    },
+    "cross_field_agreement": {
+      "origin_fields": ["consistency_stats.warnings"],
+      "transformation_logic": "Step function penalized to 0.5 if stated YOE exceeds chronological start dates, else 1.0.",
+      "confidence": "Medium"
+    },
+    "quantitative_achievement_count": {
+      "origin_fields": ["career_history.description", "profile.summary"],
+      "transformation_logic": "Raw count of quantitative metric match instances.",
+      "confidence": "Medium"
+    },
+    "performance_metric_mentions": {
+      "origin_fields": ["career_history.description", "profile.summary"],
+      "transformation_logic": "Raw count of search and ML performance keywords (NDCG, MAP, latency, F1-score, accuracy).",
+      "confidence": "High"
+    }
+  }
+}

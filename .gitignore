@@ -1,0 +1,55 @@
+# Python build & compiled artifacts
+__pycache__/
+*.pyc
+
+# Local environments and IDE configurations
+.venv/
+.vscode/
+.idea/
+
+# Logging, output, and cache directories
+logs/
+outputs/
+cache/
+*.log
+
+# Serialized arrays & models
+*.npy
+*.npz
+*.joblib
+*.pkl
+
+# Hackathon massive datasets
+hackathon_assets/candidates.jsonl
+hackathon_assets/*.jsonl.gz
+
+# Submissions & sample submissions
+sample_submission_test.csv
+sample_submission.csv
+submission.csv
+
+# Hackathon assets to ignore
+hackathon_assets/candidate_schema.json
+hackathon_assets/job_description.docx
+hackathon_assets/job_description.txt
+hackathon_assets/README.txt
+hackathon_assets/Readme.txt
+hackathon_assets/redrob_signals_doc.docx
+hackathon_assets/redrob_signals_doc.txt
+hackathon_assets/sample_submission.csv
+hackathon_assets/submission_metadata_template.yaml
+hackathon_assets/submission_spec.docx
+hackathon_assets/sumission_spec.docx
+hackathon_assets/submission_spec.txt
+
+# System documentation folder
+docs/
+
+# Local metadata & checklist exclusions
+CHANGELOG.md
+changelog.md
+FINAL_CHECKLIST.md
+final_checklist.md
+SETUP_AND_RUN.md
+setup_and_run.md
+setup_and_c=run.md

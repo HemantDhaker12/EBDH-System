@@ -1,0 +1,52 @@
+{
+    "name": "Jane Doe",
+    "email": "jane.doe@example.com",
+    "phone": "+1-555-0199",
+    "summary": "Senior Machine Learning Engineer with 8 years of experience designing ranking systems, recommender engines, and training deep learning models. Proficient in Python, PyTorch, LightGBM, and FastAPI.",
+    "skills": [
+        "Python",
+        "PyTorch",
+        "LightGBM",
+        "FastAPI",
+        "SQL",
+        "Docker",
+        "Kubernetes",
+        "Search Systems"
+    ],
+    "raw_experience": [
+        {
+            "job_title": "Senior ML Engineer",
+            "company_name": "Google",
+            "start_date": "2021-06-01",
+            "end_date": "Present",
+            "description": "Led a team designing the search ranking algorithm. Built information retrieval system using hybrid retrieval (BM25 + dense embeddings). Wrote production pipelines in Python."
+        },
+        {
+            "job_title": "Software Engineer (ML)",
+            "company_name": "Spotify",
+            "start_date": "2018-03-01",
+            "end_date": "2021-05-30",
+            "description": "Implemented recommendation systems using Python and PyTorch. Handled deployment of model pipelines in production."
+        }
+    ],
+    "raw_projects": [
+        {
+            "title": "Search Rank Engine",
+            "description": "Created custom search ranking engine using LightGBM LambdaMART and rank-bm25.",
+            "skills_used": [
+                "Python",
+                "LightGBM",
+                "rank-bm25"
+            ],
+            "url": "https://github.com/janedoe/search-rank"
+        }
+    ],
+    "raw_education": [
+        {
+            "degree": "MS",
+            "major": "Computer Science",
+            "institution": "Stanford University",
+            "graduation_year": 2018
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+# Redrob Hackathon — Submission Metadata
+# Filename: submission_metadata.yaml
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "Heaven-Hill"
+
+primary_contact:
+  name: "Hemant Dhaker"
+  email: "your-email-here@example.com"  # Placeholder
+  phone: "+91-XXXXXXXXXX"              # Placeholder
+
+team_members:
+  - name: "Hemant Dhaker"
+    email: "your-email-here@example.com"
+    role: "ML Engineer"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/YOUR_USERNAME/YOUR_REPO"  # Placeholder
+sandbox_link: "https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SANDBOX"  # Placeholder
+reproduce_command: "python rank.py --candidates ./hackathon_assets/candidates.jsonl --out ./submission.csv"
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Local CPU Workstation"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.11.0"
+  os: "Windows"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: false
+  pre_computation_time_minutes: 0
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "Gemini"
+  - "Claude"
+
+ai_usage_summary: |
+  Used Gemini and Claude for codebase modularization, feature audit checks, chronological consistency algorithms, and technical documentation. No candidate data was transmitted to external hosted API services during model execution.
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  Our pipeline implements a progressive filtering and ranking funnel (Three-Stage Sieve). First, a high-recall lexical BM25 search filters the 100k pool to 10k candidates. Second, dense semantic matching (using all-MiniLM-L6-v2 embeddings) ranks the subset, with lexical and dense rankings fused via Reciprocal Rank Fusion (RRF). Finally, 39 structured features (covering company ratios, stability, achievements, AI/ML domain relevance, and notice periods) are generated. The top candidates are scored using a trained LightGBM LambdaMART ranker and calibrated using a monotonic tie-breaker to prevent rank bucketization. Low credibility warnings (honeypots) drop candidate scores to 0.01 directly.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true
