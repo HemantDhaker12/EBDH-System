@@ -8,19 +8,19 @@ team_name: "Heaven-Hill"
 
 primary_contact:
   name: "Hemant Dhaker"
-  email: "your-email-here@example.com"  # Placeholder
-  phone: "+91-XXXXXXXXXX"              # Placeholder
+  email: "hemantdhaker00@gmail.com"  # Placeholder
+  phone: "+91-9327801024"              # Placeholder
 
 team_members:
   - name: "Hemant Dhaker"
-    email: "your-email-here@example.com"
+    email: "hemantdhaker00@gmail.com"
     role: "ML Engineer"
 
 # ============================================================================
 # Code and reproducibility
 # ============================================================================
-github_repo: "https://github.com/YOUR_USERNAME/YOUR_REPO"  # Placeholder
-sandbox_link: "https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SANDBOX"  # Placeholder
+github_repo: "https://github.com/HemantDhaker12/EBDH-System"  # Placeholder
+sandbox_link: "https://huggingface.co/spaces/Hemant-space12/EBDH-system"  # Placeholder
 reproduce_command: "python rank.py --candidates ./hackathon_assets/candidates.jsonl --out ./submission.csv"
 
 # ============================================================================

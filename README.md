@@ -117,7 +117,7 @@ EBDH/
 ## Clone the Repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY>
+git clone https://github.com/HemantDhaker12/EBDH-System
 cd EBDH
 ```
 
@@ -237,20 +237,7 @@ The implementation is designed to satisfy the hackathon constraints:
 
 ---
 
-# Documentation
 
-Additional implementation details are available in the `docs/` directory:
-
-* Architecture
-* Retrieval Pipeline
-* Ranking Pipeline
-* Feature Engineering
-* Training Pipeline
-* Reasoning Engine
-* Challenge Constraints
-* Design Decisions
-
----
 
 # Sandbox
 
@@ -259,7 +246,7 @@ A hosted sandbox demonstrating the ranking pipeline on a small candidate sample 
 **Sandbox URL**
 
 ```
-https://huggingface.co/spaces/<USERNAME>/<SPACE_NAME>
+https://huggingface.co/spaces/Hemant-space12/EBDH-system
 ```
 
 ---
