@@ -53,3 +53,9 @@ final_checklist.md
 SETUP_AND_RUN.md
 setup_and_run.md
 setup_and_c=run.md
+
+
+/EBDH-system
+
+edhc/data/caches/*.json
+edhc/data/processed/*.json
