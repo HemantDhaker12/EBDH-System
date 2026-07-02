@@ -178,7 +178,9 @@ python edhc/train_ranker.py \
     --sample-size 5000 \
     --retrieval-limit 3000
 ```
-
+```bash
+python edhc/train_ranker.py --candidates ./hackathon_assets/candidates.jsonl --sample-size 5000 --retrieval-limit 3000
+```
 ---
 
 # Reproduce submission.csv
@@ -191,6 +193,9 @@ python rank.py \
     --out submission.csv
 ```
 
+```bash
+python rank.py --candidates ./hackathon_assets/candidates.jsonl --out submission.csv
+```
 No manual editing or post-processing is required.
 
 ---
